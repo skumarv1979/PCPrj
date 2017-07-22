@@ -5,10 +5,10 @@ import java.util.List;
 
 import com.skumarv.impl.ProducerWorkerImpl;
 
-public class ProducerConsumerTest {
+public class SubmitTasks {
 	private Integer value;
 	public static void main(String[] args) {
-		ProducerConsumerTest obj = new ProducerConsumerTest();
+		SubmitTasks obj = new SubmitTasks();
 		List<ProducerWorker> prdWrkLst = new ArrayList<ProducerWorker>();
 		ProducerWorker ref = new ProducerWorkerImpl(10000l, null);
 		prdWrkLst.add(ref);
@@ -18,9 +18,9 @@ public class ProducerConsumerTest {
 		prdWrkLst.add(ref);
 		ref = new ProducerWorkerImpl(3000l, 833);
 		prdWrkLst.add(ref);
-		obj.testThread(prdWrkLst);
+		obj.submit(prdWrkLst);
 	}
-	public synchronized void testThread(List<? extends ProducerWorker> lst) {
+	public synchronized void submit(List<? extends ProducerWorker> lst) {
 		CubbyHole c = new CubbyHole();
 		if(lst!=null) {
 			int thrdCnt = 0;

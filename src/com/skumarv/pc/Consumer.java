@@ -11,7 +11,7 @@ public class Consumer extends Thread {
 	private CubbyHole cubbyhole;
 	private int number;
 	private List<Producer> producerThreadLst = null;
-	private ProducerConsumerTest prodConsTest = null;
+	private SubmitTasks prodConsTest = null;
 
 	public List<Producer> getProducerThreadLst() {
 		return producerThreadLst;
@@ -21,7 +21,7 @@ public class Consumer extends Thread {
 		this.producerThreadLst = producerThreadLst;
 	}
 
-	public Consumer(CubbyHole c, int number, List<Producer> producerThreadLst, ProducerConsumerTest prodConsTest) {
+	public Consumer(CubbyHole c, int number, List<Producer> producerThreadLst, SubmitTasks prodConsTest) {
 		cubbyhole = c;
 		this.number = number;
 		this.producerThreadLst = producerThreadLst;
