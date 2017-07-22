@@ -3,15 +3,14 @@ package com.skumarv.pc;
 public class Producer extends Thread {
 	private CubbyHole cubbyhole;
 	private int number;
+	private ProducerWorker worker;
 	private Integer value;
 	private long processingTime;
 
-	public Producer(CubbyHole c, int number, Integer value,
-			long processingTime, String name) {
+	public Producer(CubbyHole c, int number, ProducerWorker worker, String name) {
 		cubbyhole = c;
 		this.number = number;
-		this.value = value;
-		this.processingTime = processingTime;
+		this.worker = worker;
 		this.setName(name);
 	}
 
@@ -33,7 +32,7 @@ public class Producer extends Thread {
 
 	public void run() {
 		try {
-			sleep(processingTime);
+			value = worker.execute();
 			ProducerResponse resp = new ProducerResponse();
 			resp.setValue(value);
 			resp.setProducer(this);
