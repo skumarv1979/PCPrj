@@ -1,5 +1,5 @@
 package com.skumarv.pc;
 
-public interface ProducerWorker {
-	public Integer execute() throws InterruptedException;
+public interface ProducerWorker <U> {
+	public U execute() throws InterruptedException;
 }

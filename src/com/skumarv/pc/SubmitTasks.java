@@ -3,34 +3,19 @@ package com.skumarv.pc;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.skumarv.impl.ProducerWorkerImpl;
-
-public class SubmitTasks {
-	private Integer value;
-	public static void main(String[] args) {
-		SubmitTasks obj = new SubmitTasks();
-		List<ProducerWorker> prdWrkLst = new ArrayList<ProducerWorker>();
-		ProducerWorker ref = new ProducerWorkerImpl(10000l, null);
-		prdWrkLst.add(ref);
-		ref = new ProducerWorkerImpl(7000l, null);
-		prdWrkLst.add(ref);
-		ref = new ProducerWorkerImpl(5000l, null);
-		prdWrkLst.add(ref);
-		ref = new ProducerWorkerImpl(3000l, 833);
-		prdWrkLst.add(ref);
-		obj.submit(prdWrkLst);
-	}
-	public synchronized void submit(List<? extends ProducerWorker> lst) {
-		CubbyHole c = new CubbyHole();
+public class SubmitTasks <T extends ProducerWorker<U>, U> {
+	private U value;
+	public synchronized U submit(List<T> lst) {
+		CubbyHole<U> c = new CubbyHole<U>();
 		if(lst!=null) {
 			int thrdCnt = 0;
-			List<Producer> producerLst = new ArrayList<Producer>();
-			for (ProducerWorker producerWorker : lst) {
+			List<Producer<U>> producerLst = new ArrayList<Producer<U>>();
+			for (ProducerWorker<U> producerWorker : lst) {
 				thrdCnt++;
-				Producer p = new Producer(c, thrdCnt, producerWorker, "Thread-"+thrdCnt);
+				Producer<U> p = new Producer<U>(c, producerWorker, "Thread-"+thrdCnt);
 				producerLst.add(p);
 			}
-			Consumer c1 = new Consumer(c, 1, producerLst, this);
+			Consumer<T, U> c1 = new Consumer<T, U>(c, 1, producerLst, this);
 			c1.start();
 			try {
 				wait();
@@ -39,8 +24,9 @@ public class SubmitTasks {
 			}
 		}
 		System.out.println("I got the Repsonse :: "+value);
+		return value;
 	}
-	public synchronized void notifyAll(Integer value) {
+	public synchronized void notifyAll(U value) {
 		this.value = value;
 		notifyAll();
 	}

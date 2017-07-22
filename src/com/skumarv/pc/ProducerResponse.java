@@ -1,18 +1,18 @@
 package com.skumarv.pc;
 
-public class ProducerResponse {
-	private Integer value;
-	private Producer producer;
-	public Integer getValue() {
+public class ProducerResponse <U> {
+	private U value;
+	private Producer<U> producer;
+	public U getValue() {
 		return value;
 	}
-	public void setValue(Integer value) {
+	public void setValue(U value) {
 		this.value = value;
 	}
-	public Producer getProducer() {
+	public Producer<U> getProducer() {
 		return producer;
 	}
-	public void setProducer(Producer producer) {
+	public void setProducer(Producer<U> producer) {
 		this.producer = producer;
 	}
 	@Override

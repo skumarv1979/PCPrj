@@ -2,22 +2,22 @@ package com.skumarv.impl;
 
 import com.skumarv.pc.ProducerWorker;
 
-public class ProducerWorkerImpl implements ProducerWorker {
+public class ProducerWorkerImpl<U> implements ProducerWorker<U> {
 	private long processingTime;
-	private Integer returnValue;
+	private U returnValue;
 
 	public ProducerWorkerImpl() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public ProducerWorkerImpl(long processingTime, Integer returnValue) {
+	public ProducerWorkerImpl(long processingTime, U returnValue) {
 		// TODO Auto-generated constructor stub
 		this.processingTime = processingTime;
 		this.returnValue = returnValue;
 	}
 
 	@Override
-	public Integer execute() throws InterruptedException {
+	public U execute() throws InterruptedException {
 		try {
 			Thread.sleep(processingTime);
 		} catch (InterruptedException e) {

@@ -1,15 +1,12 @@
 package com.skumarv.pc;
 
-public class Producer extends Thread {
-	private CubbyHole cubbyhole;
-	private int number;
-	private ProducerWorker worker;
-	private Integer value;
-	private long processingTime;
+public class Producer <U> extends Thread {
+	private CubbyHole<U> cubbyhole;
+	private ProducerWorker<U> worker;
+	private U value;
 
-	public Producer(CubbyHole c, int number, ProducerWorker worker, String name) {
+	public Producer(CubbyHole<U> c, ProducerWorker<U> worker, String name) {
 		cubbyhole = c;
-		this.number = number;
 		this.worker = worker;
 		this.setName(name);
 	}
@@ -24,7 +21,8 @@ public class Producer extends Thread {
 	public boolean equals(Object obj) {
 		// TODO Auto-generated method stub
 		if (obj != null && obj instanceof Producer) {
-			Producer tmp = (Producer) obj;
+			@SuppressWarnings("unchecked")
+			Producer<U> tmp = (Producer<U>) obj;
 			return this.getName().equals(tmp.getName());
 		}
 		return false;
@@ -33,7 +31,7 @@ public class Producer extends Thread {
 	public void run() {
 		try {
 			value = worker.execute();
-			ProducerResponse resp = new ProducerResponse();
+			ProducerResponse<U> resp = new ProducerResponse<U>();
 			resp.setValue(value);
 			resp.setProducer(this);
 			cubbyhole.put(resp);
