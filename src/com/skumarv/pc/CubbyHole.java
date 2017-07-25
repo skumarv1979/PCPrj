@@ -18,17 +18,21 @@ public class CubbyHole<U> {
 	}
 
 	public synchronized void put(ProducerResponse<U> prdResp) {
-		while (available == true || (contents!=null && contents.getValue()!=null)) {
+		while (available == true
+				|| (contents != null && contents.getValue() != null)) {
 			try {
-				wait();
+				if (!Thread.currentThread().isInterrupted()) {
+					wait();
+				}
 			} catch (InterruptedException e) {
 			}
 		}
-		if(contents==null || (contents!=null && contents.getValue()==null))
+		if (contents == null
+				|| (contents != null && contents.getValue() == null))
 			contents = prdResp;
 		available = true;
 		notifyAll();
 		System.out.println("Produced :" + prdResp);
 	}
-	
+
 }

@@ -19,9 +19,11 @@ public class ProducerWorkerImpl<U> implements ProducerWorker<U> {
 	@Override
 	public U execute() throws InterruptedException {
 		try {
-			Thread.sleep(processingTime);
+			if (!Thread.currentThread().isInterrupted()) {
+				Thread.sleep(processingTime);
+			}
 		} catch (InterruptedException e) {
-			//e.printStackTrace();
+			// e.printStackTrace();
 			throw e;
 		}
 		return returnValue;

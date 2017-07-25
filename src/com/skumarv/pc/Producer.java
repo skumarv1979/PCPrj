@@ -1,6 +1,6 @@
 package com.skumarv.pc;
 
-public class Producer <U> extends Thread {
+public class Producer<U> extends Thread {
 	private CubbyHole<U> cubbyhole;
 	private ProducerWorker<U> worker;
 	private U value;
@@ -34,7 +34,9 @@ public class Producer <U> extends Thread {
 			ProducerResponse<U> resp = new ProducerResponse<U>();
 			resp.setValue(value);
 			resp.setProducer(this);
-			cubbyhole.put(resp);
+			if (!Thread.currentThread().isInterrupted()) {
+				cubbyhole.put(resp);
+			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
