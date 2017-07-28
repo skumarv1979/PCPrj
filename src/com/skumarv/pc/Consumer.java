@@ -1,11 +1,9 @@
 package com.skumarv.pc;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 public class Consumer<T extends ProducerWorker<U>, U> extends Thread {
 	private CubbyHole<U> cubbyhole;
@@ -29,41 +27,38 @@ public class Consumer<T extends ProducerWorker<U>, U> extends Thread {
 
 	public void run() {
 		ProducerResponse<U> value = null;
+		int thrd = 2;
+		LinkedList<Producer<U>> executingProducers = new LinkedList<Producer<U>>();
 		if (producerThreadLst != null && !producerThreadLst.isEmpty()) {
-			Iterable<Iterable<Producer<U>>> splitList = chunk(
-					producerThreadLst, 2);
-			for (Iterable<Producer<U>> iterable : splitList) {
-				for (Producer<U> producer : iterable) {
-					producer.start();
+			for (int i = 0; i < thrd; i++) {
+				if (i < producerThreadLst.size()) {
+					producerThreadLst.get(i).start();
+					executingProducers.add(producerThreadLst.get(i));
 				}
-				Set<Producer<U>> set = new HashSet<Producer<U>>();
-				boolean gotResponse = false;
-				U response = null;
-				int siz = 0;
-				if (iterable instanceof Collection<?>) {
-					siz = ((Collection<?>) iterable).size();
-				}
-				for (int i = 0; i < siz; i++) {
-					value = cubbyhole.get();
-					if (value.getProducer() != null) {
-						set.add(value.getProducer());
-					}
-					if (value.getValue() != null) {
-						gotResponse = true;
-						response = value.getValue();
-						break;
-					}
-				}
-				if (gotResponse) {
-					for (Producer<U> producer : iterable) {
-						if (!set.contains(producer)) {
-							producer.interrupt();
-						}
-					}
-					prodConsTest.notifyAll(response);
+			}
+			int producerIdx = thrd;
+			boolean gotResponse = false;
+			U response = null;
+			while (true) {
+				value = cubbyhole.get();
+				executingProducers.remove(value.getProducer());
+				if (value.getValue() != null) {
+					gotResponse = true;
+					response = value.getValue();
 					break;
 				}
-			}// all chunks, sublist processing end
+				if (producerIdx < producerThreadLst.size()) {
+					producerThreadLst.get(producerIdx).start();
+					executingProducers.add(producerThreadLst.get(producerIdx));
+					producerIdx++;
+				}
+			}
+			if (gotResponse) {
+				for (Producer<U> producer : executingProducers) {
+					producer.interrupt();
+				}
+				prodConsTest.notifyAll(response);
+			}
 		}
 	}
 
