@@ -38,7 +38,7 @@ public class Producer<U> extends Thread {
 				cubbyhole.put(resp);
 			}
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		// System.out.println("Producer #" + this.number + " put: " + value);
 	}

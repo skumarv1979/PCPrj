@@ -37,13 +37,17 @@ public class Consumer<T extends ProducerWorker<U>, U> extends Thread {
 				}
 			}
 			int producerIdx = thrd;
-			boolean gotResponse = false;
+			boolean isAllThreadsFinished = false;
 			U response = null;
-			while (true) {
+			int finishedThreadCnt = 0;
+			while (!isAllThreadsFinished) {
 				value = cubbyhole.get();
 				executingProducers.remove(value.getProducer());
+				finishedThreadCnt++;
+				if (finishedThreadCnt == producerThreadLst.size()) {
+					isAllThreadsFinished = true;
+				}
 				if (value.getValue() != null) {
-					gotResponse = true;
 					response = value.getValue();
 					break;
 				}
@@ -53,12 +57,12 @@ public class Consumer<T extends ProducerWorker<U>, U> extends Thread {
 					producerIdx++;
 				}
 			}
-			if (gotResponse) {
+			if (!isAllThreadsFinished) {
 				for (Producer<U> producer : executingProducers) {
 					producer.interrupt();
 				}
-				prodConsTest.notifyAll(response);
 			}
+			prodConsTest.notifyAll(response);
 		}
 	}
 
