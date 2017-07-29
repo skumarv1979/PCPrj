@@ -13,7 +13,7 @@ public class CubbyHole<U> {
 		}
 		available = false;
 		notifyAll();
-		System.out.println("Consumed :" + contents);
+		//System.out.println("Consumed :" + contents);
 		return contents;
 	}
 
@@ -32,7 +32,7 @@ public class CubbyHole<U> {
 			contents = prdResp;
 		available = true;
 		notifyAll();
-		System.out.println("Produced :" + prdResp);
+		//System.out.println("Produced :" + prdResp);
 	}
 
 }
