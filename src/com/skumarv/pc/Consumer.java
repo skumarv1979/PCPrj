@@ -23,6 +23,7 @@ public class Consumer<T extends ProducerWorker<U>, U> extends Thread {
 		cubbyhole = c;
 		this.producerThreadLst = producerThreadLst;
 		this.prodConsTest = prodConsTest;
+		this.setName("ConsThrd-1");
 	}
 
 	public void run() {
@@ -41,6 +42,7 @@ public class Consumer<T extends ProducerWorker<U>, U> extends Thread {
 			U response = null;
 			int finishedThreadCnt = 0;
 			while (!isAllThreadsFinished) {
+				if(value==null || value.getValue()==null)
 				value = cubbyhole.get();
 				executingProducers.remove(value.getProducer());
 				finishedThreadCnt++;
@@ -57,12 +59,14 @@ public class Consumer<T extends ProducerWorker<U>, U> extends Thread {
 					producerIdx++;
 				}
 			}
+			//System.out.println("executing thread :: "+executingProducers);
 			if (!isAllThreadsFinished) {
 				for (Producer<U> producer : executingProducers) {
 					producer.interrupt();
 				}
 			}
 			prodConsTest.notifyAll(response);
+			//System.out.println("Consume exiting");
 		}
 	}
 

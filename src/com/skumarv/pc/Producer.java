@@ -34,12 +34,14 @@ public class Producer<U> extends Thread {
 			ProducerResponse<U> resp = new ProducerResponse<U>();
 			resp.setValue(value);
 			resp.setProducer(this);
+			//System.out.println("Producer #" + Thread.currentThread().getName() + " about to put: " + value);
 			if (!Thread.currentThread().isInterrupted()) {
 				cubbyhole.put(resp);
 			}
+			//System.out.println("Producer #" + Thread.currentThread().getName() + " Exiting thread");
 		} catch (InterruptedException e) {
 			//e.printStackTrace();
 		}
-		// System.out.println("Producer #" + this.number + " put: " + value);
+		 //System.out.println("Producer #" + Thread.currentThread().getName() + " put: " + value);
 	}
 }

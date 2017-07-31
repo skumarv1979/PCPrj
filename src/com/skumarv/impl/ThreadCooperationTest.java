@@ -7,17 +7,17 @@ import com.skumarv.pc.SubmitTasks;
 
 public class ThreadCooperationTest {
 	public static void main(String[] args) {
-		SubmitTasks<ProducerWorkerImpl<Integer>, Integer> obj = new SubmitTasks<ProducerWorkerImpl<Integer>, Integer>();
-		List<ProducerWorkerImpl<Integer>> prdWrkLst = new ArrayList<ProducerWorkerImpl<Integer>>();
-		ProducerWorkerImpl<Integer> ref = new ProducerWorkerImpl<Integer>(10000l, null);
+		SubmitTasks<ProducerWorkerImpl, Integer> obj = new SubmitTasks<ProducerWorkerImpl, Integer>();
+		List<ProducerWorkerImpl> prdWrkLst = new ArrayList<ProducerWorkerImpl>();
+		ProducerWorkerImpl ref = new ProducerWorkerImpl(10000l, 123);
 		prdWrkLst.add(ref);
-		ref = new ProducerWorkerImpl<Integer>(7000l, null);
+		ref = new ProducerWorkerImpl(7000l, null);
 		prdWrkLst.add(ref);
-		ref = new ProducerWorkerImpl<Integer>(10l, null);
+		ref = new ProducerWorkerImpl(10l, 789);
 		prdWrkLst.add(ref);
-		ref = new ProducerWorkerImpl<Integer>(3000l, null);
+		ref = new ProducerWorkerImpl(3000l, 935);
 		prdWrkLst.add(ref);
-		obj.submit(prdWrkLst);
-
+		Integer in = obj.submit(prdWrkLst);
+		System.out.println("Got Response :: "+in);
 	}
 }

@@ -13,26 +13,28 @@ public class CubbyHole<U> {
 		}
 		available = false;
 		notifyAll();
-		//System.out.println("Consumed :" + contents);
+		//System.out.println("Consumed :"+Thread.currentThread().getName()+", " + contents);
 		return contents;
 	}
 
 	public synchronized void put(ProducerResponse<U> prdResp) {
-		while (available == true
-				|| (contents != null && contents.getValue() != null)) {
+		while (available == true) {
 			try {
-				if (!Thread.currentThread().isInterrupted()) {
+				if ((!Thread.currentThread().isInterrupted())
+						&&(contents==null || (contents != null && contents.getValue() == null))) {
 					wait();
 				}
 			} catch (InterruptedException e) {
+				//e.printStackTrace();
 			}
 		}
+		//System.out.println(Thread.currentThread().getName()+" Wait is over");
 		if (contents == null
 				|| (contents != null && contents.getValue() == null))
 			contents = prdResp;
 		available = true;
 		notifyAll();
-		//System.out.println("Produced :" + prdResp);
+		//System.out.println("Produced : "+Thread.currentThread().getName()+", " + prdResp);
 	}
 
 }
