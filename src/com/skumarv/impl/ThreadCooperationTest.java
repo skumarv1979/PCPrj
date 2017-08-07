@@ -9,11 +9,11 @@ public class ThreadCooperationTest {
 	public static void main(String[] args) {
 		SubmitTasks<ProducerWorkerImpl, Integer> obj = new SubmitTasks<ProducerWorkerImpl, Integer>();
 		List<ProducerWorkerImpl> prdWrkLst = new ArrayList<ProducerWorkerImpl>();
-		ProducerWorkerImpl ref = new ProducerWorkerImpl(10000l, 123);
+		ProducerWorkerImpl ref = new ProducerWorkerImpl(10000l, null);
 		prdWrkLst.add(ref);
 		ref = new ProducerWorkerImpl(7000l, null);
 		prdWrkLst.add(ref);
-		ref = new ProducerWorkerImpl(10l, 789);
+		ref = new ProducerWorkerImpl(10l, null);
 		prdWrkLst.add(ref);
 		ref = new ProducerWorkerImpl(3000l, 935);
 		prdWrkLst.add(ref);

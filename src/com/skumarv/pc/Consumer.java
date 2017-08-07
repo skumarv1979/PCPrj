@@ -53,7 +53,7 @@ public class Consumer<T extends ProducerWorker<U>, U> extends Thread {
 					response = value.getValue();
 					break;
 				}
-				if (producerIdx < producerThreadLst.size()) {
+				if (producerIdx < producerThreadLst.size() && value.getValue()==null) {
 					producerThreadLst.get(producerIdx).start();
 					executingProducers.add(producerThreadLst.get(producerIdx));
 					producerIdx++;
